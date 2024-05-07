@@ -1,3 +1,19 @@
+"""
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, see <https://www.gnu.org/licenses>.
+
+"""
 import datetime
 import random
 
@@ -122,13 +138,14 @@ def getAccount(account: Account, proxy=None) -> dict:
     return data["account"]
 
 
-def updateLicenseKey(account: Account, license_key: str, proxy=None) -> dict:
+def updateLicenseKey(account: Account, license_key: str, proxy=None, logger=None) -> dict:
     """
     Update license key
 
     :param account: account
     :param license_key: license key
     :param proxy: proxy dict
+    :param logger: logger
     :return:
     """
     timestamp = datetime.datetime.now().isoformat()[:-3] + "Z"
@@ -141,6 +158,10 @@ def updateLicenseKey(account: Account, license_key: str, proxy=None) -> dict:
     response = SESSION.put(f"{API_URL}/{API_VERSION}/reg/{account.account_id}/account",
                            headers={"Authorization": f"Bearer {account.token}"},
                            json=data, proxies=proxy)
+
+    if response.status_code >= 400:
+        if logger:
+            logger.error(f"Failed to update license key, response: {response.text}")
 
     response.raise_for_status()
 
@@ -181,4 +202,3 @@ def getClientConfig(proxy=None) -> dict:
     response.raise_for_status()
 
     return response.json()["result"]
-

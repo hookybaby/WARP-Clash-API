@@ -1,3 +1,19 @@
+"""
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, see <https://www.gnu.org/licenses>.
+
+"""
 import logging
 import sys
 import time
@@ -29,13 +45,13 @@ def doAddDataTaskOnce(account: Account = None, logger=logging.Logger(__name__)) 
         privkey, pubkey = generateWireguardKeys()
         register(pubkey, privkey, referrer=account.account_id, proxy=getProxy())
     except Exception as e:
-        logger.warning(f"Failed to get account from Cloudflare.")
+        logger.warning("Failed to get account from Cloudflare.")
         logger.warning(f"{e}")
         return False
 
     end = time.time()
 
-    logger.info(f"Got account from Cloudflare")
+    logger.info("Got account from Cloudflare")
     logger.info(f"Time used: {end - start:.2f}s")
 
     return True
@@ -55,7 +71,7 @@ def saveAccount(account: Account = None, logger=logging.Logger(__name__)):
     # Get new account info
     info = getAccount(account)
     logger.info(f"Account info: {info}")
-    logger.info(f"Save account to file")
+    logger.info("Save account to file")
     account.save()
 
 
@@ -66,18 +82,18 @@ def reoptimizeEntryPoints(logger=logging.Logger(__name__)):
     :return:
     """
     if sys.platform == "win32":
-        logger.warning(f"Reoptimize is not supported on Windows.")
+        logger.warning("Reoptimize is not supported on Windows.")
         return
 
-    logger.info(f"Start reoptimize entrypoints.")
+    logger.info("Start reoptimize entrypoints.")
 
     try:
         optimizeEntrypoints()
     except Exception as e:
-        logger.error(f"Failed to reoptimize entrypoints.")
+        logger.error("Failed to reoptimize entrypoints.")
         logger.error(f"{e}")
 
-    logger.info(f"Reoptimize entrypoints finished.")
+    logger.info("Reoptimize entrypoints finished.")
 
 # if __name__ == '__main__':
 #     privkey, pubkey = generate_wireguard_keys()

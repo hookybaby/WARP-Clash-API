@@ -1,3 +1,19 @@
+"""
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, see <https://www.gnu.org/licenses>.
+
+"""
 import logging
 
 from services.cloudflare import updatePublicKey, updateLicenseKey
@@ -26,7 +42,7 @@ def resetAccountKey(logger=logging.Logger(__name__)):
     # Save account to file
     account.save()
 
-    logger.info(f"Account key reset done")
+    logger.info("Account key reset done")
 
 
 def doUpdateLicenseKey(license_key: str, logger=logging.Logger(__name__)):
@@ -42,11 +58,11 @@ def doUpdateLicenseKey(license_key: str, logger=logging.Logger(__name__)):
     account = getCurrentAccount(logger)
 
     if account.license_key == license_key:
-        logger.warning(f"License key is the same, no need to update")
+        logger.warning("License key is the same, no need to update")
         return
 
     # Update license key
-    updateLicenseKey(account, license_key)
+    updateLicenseKey(account, license_key, logger=logger)
 
     # Save changes to account
     account.license_key = license_key
@@ -55,4 +71,4 @@ def doUpdateLicenseKey(license_key: str, logger=logging.Logger(__name__)):
     # Account needs to be reset after license key update
     resetAccountKey(logger)
 
-    logger.info(f"License key updated")
+    logger.info("License key updated")
